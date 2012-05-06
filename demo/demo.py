@@ -14,8 +14,22 @@ bg = parallax.parallaxSurface()
 bg.addLevel('p2.png', 2)
 bg.addLevel('p1.png', 1)
 
-while True:
-    bg.draw(screen)
-    pygame.display.flip()
-    bg.scroll(2)
+run = True
+speed = 0
+while run:
+	for event in pygame.event.get():
+		if event.type == QUIT:
+			run = False
+		if event.type == KEYDOWN and event.key == K_RIGHT:
+			speed += 5
+		if event.type == KEYUP and event.key == K_RIGHT:
+			speed -= 5
+		if event.type == KEYDOWN and event.key == K_LEFT:
+			speed -= 5
+		if event.type == KEYUP and event.key == K_LEFT:
+			speed += 5
+		
+	bg.scroll(speed)
+	bg.draw(screen)
+	pygame.display.flip()
 
