@@ -30,11 +30,11 @@ class parallaxSurface:
 		i = 0
 		for s in self.parallaxSurfaces:
 			surface.blit(s, (0,0), (self.sc[i], 0, SCREENRECT.width, SCREENRECT.height))
-			surface.blit(s, (SCREENRECT.width - self.sc[i], 0), (0, 0, self.sc[i], SCREENRECT.height))
+			surface.blit(s, (s.get_width() - self.sc[i], 0), (0, 0, self.sc[i], SCREENRECT.height))
 			i += 1
 
 	def scroll(self, offset):
 		self.scroller = (self.scroller + offset)
 		for i in range(len(self.sc)):
-			self.sc[i] = (self.scroller / self.factor[i]) % SCREENRECT.width
+			self.sc[i] = (self.scroller / self.factor[i]) % self.parallaxSurfaces[i].get_width()
 
