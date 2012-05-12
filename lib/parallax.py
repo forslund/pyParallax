@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #    Copyright (C) , 2012 Åke Forslund (ake.forslund@gmail.com)
 #
 #    Permission to use, copy, modify, and/or distribute this software for any
