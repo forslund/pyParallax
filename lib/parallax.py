@@ -19,8 +19,6 @@ import os, sys
 import pygame
 from pygame.locals import *
 
-SCREENRECT = Rect(0,0, 640, 480)
-
 class parallaxSubSurface:
 	def __init__(self, s, f):
 		self.scroll = 0
@@ -46,11 +44,12 @@ class parallaxSurface:
 		self.numLevels += 1
 
 	def draw(self, surface):
-		i = 0
+		sWidth  = surface.get_width()
+		sHeight = surface.get_height()
+
 		for l in self.parallaxLevels:
-			surface.blit(l.surface, (0,0), (l.scroll, 0, SCREENRECT.width, SCREENRECT.height))
-			surface.blit(l.surface, (l.surface.get_width() - l.scroll, 0), (0, 0, l.scroll, SCREENRECT.height))
-			i += 1
+			surface.blit(l.surface, (0,0), (l.scroll, 0, sWidth, sHeight))
+			surface.blit(l.surface, (l.surface.get_width() - l.scroll, 0), (0, 0, l.scroll, sHeight))
 
 	def scroll(self, offset):
 		self.scroller = (self.scroller + offset)
