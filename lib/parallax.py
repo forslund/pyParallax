@@ -1,4 +1,6 @@
+'''A simple parallax rendering module'''
 # -*- coding: utf-8 -*-
+
 #    Copyright (C) , 2012 Åke Forslund (ake.forslund@gmail.com)
 #
 #    Permission to use, copy, modify, and/or distribute this software for any
@@ -26,12 +28,18 @@ class parallaxSubSurface:
 		self.surface = s
 
 class parallaxSurface:
+	'''Class handling parallax scrolling of a series of surfaces'''
 	def __init__(self):
 		print "parllaxSurface inited!"
 		self.numLevels = 0
 		self.scroller = 0
 		self.parallaxLevels = []
 	def addLevel(self, imagePath, scrollFactor):
+		'''Adds a parallax level, first added level is the 
+		   deepest level, i.e. furthest back into the \"screen\".
+
+		   imagePath is the path to the image to be used
+		   scrollFactor is the slowdown factor for this parallax level.'''
 		try:
 			image = (pygame.image.load(imagePath))
 		except:
@@ -44,6 +52,7 @@ class parallaxSurface:
 		self.numLevels += 1
 
 	def draw(self, surface):
+		''' This draws all parallax levels to the surface provided as argument'''
 		sWidth  = surface.get_width()
 		sHeight = surface.get_height()
 
@@ -52,6 +61,7 @@ class parallaxSurface:
 			surface.blit(l.surface, (l.surface.get_width() - l.scroll, 0), (0, 0, l.scroll, sHeight))
 
 	def scroll(self, offset):
+		'''scroll moves each surface _offset_ pixels / assigned factor'''
 		self.scroller = (self.scroller + offset)
 		for l in self.parallaxLevels:
 			l.scroll = (self.scroller / l.factor) % l.surface.get_width()
