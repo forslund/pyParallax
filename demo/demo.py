@@ -24,30 +24,34 @@ sys.path.append ("../lib")
 import parallax
 
 pygame.init()
-screen = pygame.display.set_mode((640, 480))
+screen = pygame.display.set_mode((640, 480), pygame.DOUBLEBUF)
 pygame.display.set_caption('Parallax-test')
 pygame.mouse.set_visible(0)
 
 bg = parallax.parallaxSurface()
-bg.addLevel('p2.png', 2)
+bg.addLevel('p2.png', 5)
+bg.addLevel('p3.png', 2)
 bg.addLevel('p1.png', 1)
 
 run = True
 speed = 0
+t_ref = 0
 while run:
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			run = False
 		if event.type == KEYDOWN and event.key == K_RIGHT:
-			speed += 5
+			speed += 10
 		if event.type == KEYUP and event.key == K_RIGHT:
-			speed -= 5
+			speed -= 10
 		if event.type == KEYDOWN and event.key == K_LEFT:
-			speed -= 5
+			speed -= 10
 		if event.type == KEYUP and event.key == K_LEFT:
-			speed += 5
+			speed += 10
 		
 	bg.scroll(speed)
-	bg.draw(screen)
-	pygame.display.flip()
+	t = pygame.time.get_ticks()
+	if (t - t_ref) > 60:
+		bg.draw(screen)
+		pygame.display.flip()
 
