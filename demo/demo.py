@@ -28,10 +28,10 @@ screen = pygame.display.set_mode((640, 480), pygame.DOUBLEBUF)
 pygame.display.set_caption('Parallax-test')
 pygame.mouse.set_visible(0)
 
-bg = parallax.parallaxSurface()
-bg.addLevel('p2.png', 5)
-bg.addLevel('p3.png', 2)
-bg.addLevel('p1.png', 1)
+bg = parallax.ParallaxSurface()
+bg.add('p2.png', 5)
+bg.add('p3.png', 2)
+bg.add('p1.png', 1)
 
 run = True
 speed = 0
