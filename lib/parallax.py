@@ -42,8 +42,8 @@ class ParallaxSurface:
         except:
             message = "couldn't open image:" + image_path
             raise SystemExit, message
-
-        image.set_colorkey((0xff, 0x00, 0xea))
+        if len(self.levels) > 0:
+            image.set_colorkey((0xff, 0x00, 0xea))
         image = image.convert()
         self.levels.append(_subsurface(image, scroll_factor))
 
