@@ -32,7 +32,7 @@ class ParallaxSurface:
         self.scroller = 0
         self.levels = []
     def add(self, image_path, scroll_factor):
-        '''Adds a parallax level, first added level is the 
+        '''Adds a parallax level, first added level is the
            deepest level, i.e. furthest back into the \"screen\".
 
            image_path is the path to the image to be used
@@ -48,17 +48,17 @@ class ParallaxSurface:
         self.levels.append(_subsurface(image, scroll_factor))
 
     def draw(self, surface):
-        ''' This draws all parallax levels to the surface 
-	        provided as argument '''
+        ''' This draws all parallax levels to the surface
+            provided as argument '''
         s_width  = surface.get_width()
         s_height = surface.get_height()
 
         for lvl in self.levels:
-            surface.blit(lvl.surface, (0, 0), 
-					     (lvl.scroll, 0, s_width, s_height))
-            surface.blit(lvl.surface, 
-					     (lvl.surface.get_width() - lvl.scroll, 0), 
-						 (0, 0, lvl.scroll, s_height))
+            surface.blit(lvl.surface, (0, 0),
+                        (lvl.scroll, 0, s_width, s_height))
+            surface.blit(lvl.surface,
+                        (lvl.surface.get_width() - lvl.scroll, 0),
+                         (0, 0, lvl.scroll, s_height))
 
     def scroll(self, offset):
         '''scroll moves each surface _offset_ pixels / assigned factor'''
