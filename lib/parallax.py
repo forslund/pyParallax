@@ -27,10 +27,12 @@ class _subsurface:
 
 class ParallaxSurface:
     '''Class handling parallax scrolling of a series of surfaces'''
-    def __init__(self):
+    def __init__(self, colorkey_flags = 0):
         print "parllaxSurface inited!"
+        self.colorkey_flags = colorkey_flags
         self.scroller = 0
         self.levels = []
+
     def add(self, image_path, scroll_factor):
         '''Adds a parallax level, first added level is the
            deepest level, i.e. furthest back into the \"screen\".
@@ -42,9 +44,9 @@ class ParallaxSurface:
         except:
             message = "couldn't open image:" + image_path
             raise SystemExit, message
-        if len(self.levels) > 0:
-            image.set_colorkey((0xff, 0x00, 0xea))
         image = image.convert()
+        if len(self.levels) > 0:
+            image.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
         self.levels.append(_subsurface(image, scroll_factor))
 
     def draw(self, surface):
