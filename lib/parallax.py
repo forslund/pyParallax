@@ -27,11 +27,12 @@ class _subsurface:
 
 class ParallaxSurface:
     '''Class handling parallax scrolling of a series of surfaces'''
-    def __init__(self, colorkey_flags = 0):
+    def __init__(self, size, colorkey_flags = 0):
         print "parllaxSurface inited!"
         self.colorkey_flags = colorkey_flags
         self.scroller = 0
         self.levels = []
+        self.size = size
 
     def add(self, image_path, scroll_factor):
         '''Adds a parallax level, first added level is the
@@ -49,11 +50,17 @@ class ParallaxSurface:
             image.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
         self.levels.append(_subsurface(image, scroll_factor))
 
+    def add_surface(self, surface, scroll_factor):
+        surface = surface.convert()
+        if len(self.levels) > 0:
+            surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
+        self.levels.append(_subsurface(surface, scroll_factor))
+
     def draw(self, surface):
         ''' This draws all parallax levels to the surface
             provided as argument '''
-        s_width  = surface.get_width()
-        s_height = surface.get_height()
+        s_width  = self.size[0]
+        s_height = self.size[1]
 
         for lvl in self.levels:
             surface.blit(lvl.surface, (0, 0),

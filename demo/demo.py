@@ -28,7 +28,7 @@ screen = pygame.display.set_mode((640, 480), pygame.DOUBLEBUF)
 pygame.display.set_caption('Parallax-test')
 pygame.mouse.set_visible(0)
 
-bg = parallax.ParallaxSurface()
+bg = parallax.ParallaxSurface(pygame.RLEACCEL)
 bg.add('p2.png', 5)
 bg.add('p3.png', 2)
 bg.add('p1.png', 1)
