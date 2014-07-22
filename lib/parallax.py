@@ -45,13 +45,22 @@ class ParallaxSurface:
         except:
             message = "couldn't open image:" + image_path
             raise SystemExit, message
-        image = image.convert()
+        if ".png" in image_path:
+            image = image.convert_alpha()
+        else:
+            image = image.convert()
         if len(self.levels) > 0:
             image.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
         self.levels.append(_subsurface(image, scroll_factor))
 
     def add_surface(self, surface, scroll_factor):
         surface = surface.convert()
+        if len(self.levels) > 0:
+            surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
+        self.levels.append(_subsurface(surface, scroll_factor))
+        
+    def add_surface_png(self, surface, scroll_factor):
+        surface = surface.convert_alpha()
         if len(self.levels) > 0:
             surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
         self.levels.append(_subsurface(surface, scroll_factor))
