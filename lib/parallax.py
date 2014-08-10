@@ -53,13 +53,14 @@ class ParallaxSurface:
             image.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
         self.levels.append(_subsurface(image, scroll_factor))
 
-    def add_surface(self, surface, scroll_factor):
+    def add_colorkeyed_surface(self, surface, scroll_factor,
+            color_key = (0xff, 0x00, 0xea)):
         surface = surface.convert()
         if len(self.levels) > 0:
-            surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
+            surface.set_colorkey(color_key, self.colorkey_flags)
         self.levels.append(_subsurface(surface, scroll_factor))
         
-    def add_surface_png(self, surface, scroll_factor):
+    def add_surface(self, surface, scroll_factor):
         surface = surface.convert_alpha()
         if len(self.levels) > 0:
             surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
