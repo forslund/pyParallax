@@ -28,13 +28,26 @@ class _subsurface:
 class ParallaxSurface:
 	'''Class handling parallax scrolling of a series of surfaces'''
 	def __init__(self, size, colorkey_flags = 0):
-		print "parllaxSurface inited!"
 		self.colorkey_flags = colorkey_flags
 		self.scroller = 0
 		self.levels = []
 		self.levels_id = {}
 		self.size = size
-
+		self.opt =  {
+						"orientation":"horizontal",
+						"direction":"left"
+					}
+		print "parllaxSurface inited!"
+	def chg_size(self,size):
+		self.size = size
+	def update(self, image_path, scroll_factor,size = (0,0)):
+		self.rem(image_path)
+		self.add(image_path, scroll_factor,size)
+	def rem(self, image_path):
+		if(image_path in self.levels_id):
+			elem_id = self.levels_id[image_path]
+			del self.levels[elem_id]
+			del self.levels_id[image_path]
 	def add(self, image_path, scroll_factor,size = (0,0)):
 		'''Adds a parallax level, first added level is the
 		   deepest level, i.e. furthest back into the \"screen\".
@@ -52,15 +65,13 @@ class ParallaxSurface:
 			image = image.convert()
 		if len(self.levels) > 0:
 			image.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
-		self.levels.append(_subsurface(image, scroll_factor))
 		if(size[0] != 0 and size[1] != 0):
 			image = pygame.transform.scale(image, size)
 			self.chg_size(size)
 		self.levels_id[image_path] = len(self.levels)
 		self.levels.append(_subsurface(image, scroll_factor))
 
-	def add_colorkeyed_surface(self, surface, scroll_factor,
-			color_key = (0xff, 0x00, 0xea)):
+	def add_colorkeyed_surface(self, surface, scroll_factor,color_key = (0xff, 0x00, 0xea)):
 		surface = surface.convert()
 		if len(self.levels) > 0:
 			surface.set_colorkey(color_key, self.colorkey_flags)
@@ -71,33 +82,35 @@ class ParallaxSurface:
 		if len(self.levels) > 0:
 			surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
 		self.levels.append(_subsurface(surface, scroll_factor))
-	
-	def chg_size(self,size):
-		self.size = size
-	def update(self, image_path, scroll_factor,size = (0,0)):
-		self.rem(image_path)
-		self.add(image_path, scroll_factor,size)
-	def rem(self, image_path):
-		if(image_path in self.levels_id):
-			elem_id = self.levels_id[image_path]
-			del self.levels[elem_id]
-			del self.levels_id[image_path]
+
 	def draw(self, surface):
 		''' This draws all parallax levels to the surface
 			provided as argument '''
 		s_width  = self.size[0]
 		s_height = self.size[1]
-
 		for lvl in self.levels:
-			surface.blit(lvl.surface, (0, 0),
-						(lvl.scroll, 0, s_width, s_height))
-			surface.blit(lvl.surface,
-						(lvl.surface.get_width() - lvl.scroll, 0),
-						 (0, 0, lvl.scroll, s_height))
+			if(self.opt["orientation"] == "vertical"):
+				if(self.opt["direction"] == "bottom"):
+					surface.blit(lvl.surface, (0, 0), (0, -lvl.scroll, s_width, s_height))
+					surface.blit(lvl.surface, (0, lvl.scroll - lvl.surface.get_height()))
+				else:
+					surface.blit(lvl.surface, (0, 0), (0, lvl.scroll, s_width, s_height))
+					surface.blit(lvl.surface, (0,lvl.surface.get_height() - lvl.scroll))
+			else:
+				if(self.opt["direction"] == "left"):
+					surface.blit(lvl.surface, (0, 0), (lvl.scroll, 0, s_width, s_height))
+					surface.blit(lvl.surface, (lvl.surface.get_width() - lvl.scroll, 0),(0, 0, lvl.scroll, s_height))
+				else:
+					surface.blit(lvl.surface, (0, 0), (-lvl.scroll, 0, s_width, s_height))
+					surface.blit(lvl.surface, (lvl.scroll - lvl.surface.get_width(), 0),(0, 0, -lvl.scroll, s_height))
 
-	def scroll(self, offset):
+	def scroll(self, offset,opt={"orientation":"horizontal","direction":"left"}):
 		'''scroll moves each surface _offset_ pixels / assigned factor'''
+		if(isinstance(opt, dict)):
+			self.opt.update(opt) # Merge given array & default array
 		self.scroller = (self.scroller + offset)
 		for lvl in self.levels:
-			lvl.scroll = (self.scroller / lvl.factor) % lvl.surface.get_width()
-
+			if(self.opt["orientation"] == "vertical"):
+				lvl.scroll = (self.scroller / lvl.factor) % lvl.surface.get_height()
+			else:
+				lvl.scroll = (self.scroller / lvl.factor) % lvl.surface.get_width()
