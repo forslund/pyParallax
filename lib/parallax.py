@@ -65,11 +65,11 @@ class ParallaxSurface:
 			image = image.convert()
 		if len(self.levels) > 0:
 			image.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
-		if(size[0] != 0 and size[1] != 0):
-			image = pygame.transform.scale(image, size)
-			self.chg_size(size)
-		self.levels_id[image_path] = len(self.levels)
-		self.levels.append(_subsurface(image, scroll_factor))
+		if(size[0] != 0 and size[1] != 0): # If the size is 0,0 then:
+			image = pygame.transform.scale(image, size) # Change the image size
+			self.chg_size(size) # Update the size
+		self.levels_id[image_path] = len(self.levels) # Track the current image by it id
+		self.levels.append(_subsurface(image, scroll_factor)) # Append the image in _subsurface
 
 	def add_colorkeyed_surface(self, surface, scroll_factor,color_key = (0xff, 0x00, 0xea)):
 		surface = surface.convert()
