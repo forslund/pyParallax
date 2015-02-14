@@ -33,6 +33,22 @@ bg.add('p2.png', 5)
 bg.add('p3.png', 2)
 bg.add('p1.png', 1)
 
+'''
+possible values are
+no value = [default]
+
+orientation :
+		[+] horizontal [default]
+				[*] direction:
+						left | right [default]
+		[+] vertical
+				[*] direction:
+						bottom | top [default]
+'''
+opt = {
+		"orientation":"horizontal",
+		"direction":"left"
+	  }
 run = True
 speed = 0
 t_ref = 0
@@ -49,7 +65,7 @@ while run:
 		if event.type == KEYUP and event.key == K_LEFT:
 			speed += 10
 		
-	bg.scroll(speed)
+	bg.scroll(speed,opt)
 	t = pygame.time.get_ticks()
 	if (t - t_ref) > 60:
 		bg.draw(screen)
