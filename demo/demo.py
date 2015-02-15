@@ -38,36 +38,36 @@ possible values are
 no value = [default]
 
 orientation :
-		[+] horizontal [default]
-				[*] direction:
-						left | right [default]
-		[+] vertical
-				[*] direction:
-						bottom | top [default]
+        [+] horizontal [default]
+                [*] direction:
+                        left | right [default]
+        [+] vertical
+                [*] direction:
+                        bottom | top [default]
 '''
 opt = {
-		"orientation":"horizontal",
-		"direction":"left"
-	  }
+        "orientation":"horizontal",
+        "direction":"left"
+      }
 run = True
 speed = 0
 t_ref = 0
 while run:
-	for event in pygame.event.get():
-		if event.type == QUIT:
-			run = False
-		if event.type == KEYDOWN and event.key == K_RIGHT:
-			speed += 10
-		if event.type == KEYUP and event.key == K_RIGHT:
-			speed -= 10
-		if event.type == KEYDOWN and event.key == K_LEFT:
-			speed -= 10
-		if event.type == KEYUP and event.key == K_LEFT:
-			speed += 10
-		
-	bg.scroll(speed,opt)
-	t = pygame.time.get_ticks()
-	if (t - t_ref) > 60:
-		bg.draw(screen)
-		pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            run = False
+        if event.type == KEYDOWN and event.key == K_RIGHT:
+            speed += 10
+        if event.type == KEYUP and event.key == K_RIGHT:
+            speed -= 10
+        if event.type == KEYDOWN and event.key == K_LEFT:
+            speed -= 10
+        if event.type == KEYUP and event.key == K_LEFT:
+            speed += 10
+        
+    bg.scroll(speed,opt)
+    t = pygame.time.get_ticks()
+    if (t - t_ref) > 60:
+        bg.draw(screen)
+        pygame.display.flip()
 
