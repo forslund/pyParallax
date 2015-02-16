@@ -34,10 +34,7 @@ class ParallaxSurface(object):
         self.levels = []
         self.levels_id = {}
         self.size = size
-        self.opt = {
-            'orientation' : 'horizontal',
-            'direction':'left'
-        }
+        self.orientation = 'horizontal'
 
     def chg_size(self, size):
         self.size = size
@@ -95,39 +92,26 @@ class ParallaxSurface(object):
         s_width = self.size[0]
         s_height = self.size[1]
         for lvl in self.levels:
-            if self.opt["orientation"] == "vertical":
-                if self.opt["direction"] == "bottom":
-                    surface.blit(lvl.surface, (0, 0),
-                                 (0, -lvl.scroll, s_width, s_height))
-                    surface.blit(lvl.surface,
-                                 (0, lvl.scroll - lvl.surface.get_height()))
-                else:
-                    surface.blit(lvl.surface, (0, 0),
-                                 (0, lvl.scroll, s_width, s_height))
-                    surface.blit(lvl.surface,
-                                 (0, lvl.surface.get_height() - lvl.scroll))
+            if self.orientation == 'vertical':
+                surface.blit(lvl.surface, (0, 0),
+                             (0, -lvl.scroll, s_width, s_height))
+                surface.blit(lvl.surface,
+                             (0, lvl.scroll - lvl.surface.get_height()))
             else:
-                if self.opt["direction"] == "left":
-                    surface.blit(lvl.surface, (0, 0),
-                                 (lvl.scroll, 0, s_width, s_height))
-                    surface.blit(lvl.surface,
-                                 (lvl.surface.get_width() - lvl.scroll, 0),
-                                 (0, 0, lvl.scroll, s_height))
-                else:
-                    surface.blit(lvl.surface, (0, 0),
-                                 (-lvl.scroll, 0, s_width, s_height))
-                    surface.blit(lvl.surface,
-                                 (lvl.scroll - lvl.surface.get_width(), 0),
-                                 (0, 0, -lvl.scroll, s_height))
+                surface.blit(lvl.surface, (0, 0),
+                             (lvl.scroll, 0, s_width, s_height))
+                surface.blit(lvl.surface,
+                             (lvl.surface.get_width() - lvl.scroll, 0),
+                             (0, 0, lvl.scroll, s_height))
 
-    def scroll(self, offset,
-               opt={"orientation" : "horizontal", "direction" : "left"}):
+    def scroll(self, offset, orientation=None):
         '''scroll moves each surface _offset_ pixels / assigned factor'''
-        if isinstance(opt, dict):
-            self.opt.update(opt) # Merge given array & default array
+        if orientation is not None:
+            self.orientation = orientation
+
         self.scroller = (self.scroller + offset)
         for lvl in self.levels:
-            if self.opt["orientation"] == "vertical":
+            if self.orientation == 'vertical':
                 lvl.scroll = (self.scroller / lvl.factor) \
                              % lvl.surface.get_height()
             else:
