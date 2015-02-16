@@ -37,24 +37,30 @@ class ParallaxSurface(object):
         self.orientation = 'horizontal'
 
     def chg_size(self, size):
+        ''' Changes the parallax surface's size. '''
         self.size = size
 
     def update(self, image_path, scroll_factor, size=(0, 0)):
+        ''' Updates the parallax level identified by image_path and
+            redefines the layer's scroll_factor and the size of the entire
+            parallax surface. '''
         self.rem(image_path)
         self.add(image_path, scroll_factor, size)
 
     def rem(self, image_path):
+        ''' Removes the parallax level created from the image_path.
+            If no matching level is found nothing is removed. '''
         if image_path in self.levels_id:
             elem_id = self.levels_id[image_path]
             del self.levels[elem_id]
             del self.levels_id[image_path]
 
     def add(self, image_path, scroll_factor, size=None):
-        '''Adds a parallax level, first added level is the
-           deepest level, i.e. furthest back into the \"screen\".
+        ''' Adds a parallax level, first added level is the
+            deepest level, i.e. furthest back into the \"screen\".
 
-           image_path is the path to the image to be used
-           scroll_factor is the slowdown factor for this parallax level.'''
+            image_path is the path to the image to be used
+            scroll_factor is the slowdown factor for this parallax level. '''
         try:
             image = (pygame.image.load(image_path))
         except:
@@ -75,12 +81,14 @@ class ParallaxSurface(object):
 
     def add_colorkeyed_surface(self, surface, scroll_factor,
                                color_key=(0xff, 0x00, 0xea)):
+        ''' Adds a colorkeyed surface created elsewhere. '''
         surface = surface.convert()
         if len(self.levels) > 0:
             surface.set_colorkey(color_key, self.colorkey_flags)
         self.levels.append(_subsurface(surface, scroll_factor))
 
     def add_surface(self, surface, scroll_factor):
+        ''' Adds a surface created elsewhere. '''
         surface = surface.convert_alpha()
         if len(self.levels) > 0:
             surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
@@ -88,7 +96,7 @@ class ParallaxSurface(object):
 
     def draw(self, surface):
         ''' This draws all parallax levels to the surface
-            provided as argument '''
+            provided as argument. '''
         s_width = self.size[0]
         s_height = self.size[1]
         for lvl in self.levels:
@@ -119,8 +127,7 @@ class ParallaxSurface(object):
                              % lvl.surface.get_width()
 
 class VerticalParallaxSurface(ParallaxSurface):
-    ''' Class implementing vertical scrolling parallax surface
-    '''
+    ''' Class implementing vertical scrolling parallax surface. '''
     def __init__(self, size, colorkey_flags=0):
         ParallaxSurface.__init__(self, size, colorkey_flags)
         self.orientation = 'vertical'
