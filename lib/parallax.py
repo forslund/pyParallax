@@ -117,3 +117,10 @@ class ParallaxSurface(object):
             else:
                 lvl.scroll = (self.scroller / lvl.factor) \
                              % lvl.surface.get_width()
+
+class VerticalParallaxSurface(ParallaxSurface):
+    ''' Class implementing vertical scrolling parallax surface
+    '''
+    def __init__(self, size, colorkey_flags=0):
+        ParallaxSurface.__init__(self, size, colorkey_flags)
+        self.orientation = 'vertical'
