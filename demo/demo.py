@@ -20,7 +20,7 @@ import os, sys
 import pygame
 from pygame.locals import *
 
-sys.path.append ("../lib")
+sys.path.append ("../")
 import parallax
 
 pygame.init()
