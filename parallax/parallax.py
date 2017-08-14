@@ -65,7 +65,7 @@ class ParallaxSurface(object):
             image = (pygame.image.load(image_path))
         except:
             message = "couldn't open image:" + image_path
-            raise SystemExit, message
+            raise SystemExit(message)
         if ".png" in image_path:
             image = image.convert_alpha()
         else:
