@@ -1,1 +1,1 @@
-from parallax import *
+from .parallax import *
