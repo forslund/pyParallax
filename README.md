@@ -9,7 +9,7 @@ If you'd like to add an image that does not scroll at all, set the `scroll_facto
 
 Contributors:
 -------------
-zero-clouds
-ghighi-du63000
-williamu32
-cheffley6
+zero-clouds  
+ghighi-du63000  
+williamu32  
+cheffley6  
