@@ -19,12 +19,14 @@
 
 import pygame
 
+
 class _subsurface(object):
     '''Container class for subsurface'''
     def __init__(self, surface, factor):
         self.scroll = 0
         self.factor = factor
         self.surface = surface
+
 
 class ParallaxSurface(object):
     '''Class handling parallax scrolling of a series of surfaces'''
@@ -37,35 +39,43 @@ class ParallaxSurface(object):
         self.orientation = 'horizontal'
 
     def chg_size(self, size):
-        ''' Changes the parallax surface's size. '''
+        '''Changes the parallax surface's size.'''
         self.size = size
 
     def update(self, image_path, scroll_factor, size=(0, 0)):
-        ''' Updates the parallax level identified by image_path and
-            redefines the layer's scroll_factor and the size of the entire
-            parallax surface. '''
+        '''Modify a parallax layer.
+
+        Updates the parallax level identified by image_path and redefines the
+        layer's scroll_factor and the size of the entire parallax surface.
+        '''
         self.rem(image_path)
         self.add(image_path, scroll_factor, size)
 
     def rem(self, image_path):
-        ''' Removes the parallax level created from the image_path.
-            If no matching level is found nothing is removed. '''
+        '''Removes the parallax level created from the image_path.
+
+        If no matching level is found nothing is removed.
+        '''
         if image_path in self.levels_id:
             elem_id = self.levels_id[image_path]
             del self.levels[elem_id]
             del self.levels_id[image_path]
 
     def add(self, image_path, scroll_factor, size=None):
-        ''' Adds a parallax level, first added level is the
-            deepest level, i.e. furthest back into the \"screen\".
+        '''Adds a parallax level.
 
-            image_path is the path to the image to be used
-            scroll_factor is the slowdown factor for this parallax level. '''
+        Dirst added level is the deepest level, i.e. furthest back into the
+        \"screen\".
+
+        Args:
+            image_path: the path to the image to be used
+            scroll_factor: the slowdown factor for this parallax level.
+        '''
         try:
             image = (pygame.image.load(image_path))
-        except:
+        except Exception as e:
             message = "couldn't open image:" + image_path
-            raise SystemExit(message)
+            raise SystemExit(message) from e
         if ".png" in image_path:
             image = image.convert_alpha()
         else:
@@ -73,30 +83,31 @@ class ParallaxSurface(object):
         if len(self.levels) > 0:
             image.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
         if size is not None:
-            image = pygame.transform.scale(image, size) # Change the image size
-            self.chg_size(size) # Update the size
+            # Fit image to size
+            image = pygame.transform.scale(image, size)
+            self.chg_size(size)  # Update the size
         # Track the current image by it id
         self.levels_id[image_path] = len(self.levels)
         self.levels.append(_subsurface(image, scroll_factor))
 
     def add_colorkeyed_surface(self, surface, scroll_factor,
                                color_key=(0xff, 0x00, 0xea)):
-        ''' Adds a colorkeyed surface created elsewhere. '''
+        '''Adds a colorkeyed surface created elsewhere.'''
         surface = surface.convert()
         if len(self.levels) > 0:
             surface.set_colorkey(color_key, self.colorkey_flags)
         self.levels.append(_subsurface(surface, scroll_factor))
 
     def add_surface(self, surface, scroll_factor):
-        ''' Adds a surface created elsewhere. '''
+        '''Adds a surface created elsewhere.'''
         surface = surface.convert_alpha()
         if len(self.levels) > 0:
             surface.set_colorkey((0xff, 0x00, 0xea), self.colorkey_flags)
         self.levels.append(_subsurface(surface, scroll_factor))
 
     def draw(self, surface):
-        ''' This draws all parallax levels to the surface
-            provided as argument. '''
+        '''This draws all parallax levels to the surface provided as argument.
+        '''
         s_width = self.size[0]
         s_height = self.size[1]
         for lvl in self.levels:
@@ -125,6 +136,7 @@ class ParallaxSurface(object):
             else:
                 lvl.scroll = (self.scroller / lvl.factor) \
                              % lvl.surface.get_width()
+
 
 class VerticalParallaxSurface(ParallaxSurface):
     ''' Class implementing vertical scrolling parallax surface. '''
