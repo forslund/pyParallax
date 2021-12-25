@@ -25,8 +25,8 @@ from pygame.locals import *
 import parallax
 
 # MODE can be set to MANUAL, in which the user presses the arrow keys
-# to manually scroll the image left or right, or it can be set to LEFT or RIGHT,
-# to automatically scroll left or right.
+# to manually scroll the image left or right, or it can be set to LEFT or
+# RIGHT to automatically scroll left or right.
 MODE = "MANUAL"
 
 scene_dimensions = (640, 480)
@@ -38,7 +38,8 @@ pygame.mouse.set_visible(0)
 
 bg = parallax.ParallaxSurface(scene_dimensions, pygame.RLEACCEL)
 
-image_directory = "demo/images"
+
+image_directory = join(dirname(__file__), "images")
 
 # clouds should not move at all
 bg.add(join(image_directory, 'clouds.png'), inf)
@@ -56,7 +57,7 @@ while run:
     for event in pygame.event.get():
         if event.type == QUIT:
             run = False
-        
+
         # Scroll speed can be adjusted below.
         # On manual mode, this block causes the scroll to move twice as quickly
         # going left vs. going right
@@ -74,7 +75,8 @@ while run:
         elif MODE == "RIGHT":
             scroll_speed = 4
         else:
-            raise Exception("MODE must be set to either MANUAL, LEFT, or RIGHT")
+            raise Exception("MODE must be set to either "
+                            "MANUAL, LEFT, or RIGHT")
 
     bg.scroll(scroll_speed)  # Move the background with the set scroll_speed
     t = pygame.time.get_ticks()
