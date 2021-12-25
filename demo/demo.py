@@ -17,17 +17,19 @@
 
 
 from os.path import dirname, join
+import sys
 from math import inf
 
 import pygame
 from pygame.locals import *
 
+sys.path.append("../")
 import parallax
 
 # MODE can be set to MANUAL, in which the user presses the arrow keys
 # to manually scroll the image left or right, or it can be set to LEFT or RIGHT,
 # to automatically scroll left or right.
-MODE = "RIGHT"
+MODE = "MANUAL"
 
 scene_dimensions = (640, 480)
 
