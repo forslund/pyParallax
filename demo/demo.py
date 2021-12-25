@@ -17,41 +17,66 @@
 
 
 from os.path import dirname, join
+from math import inf
 
 import pygame
 from pygame.locals import *
 
 import parallax
 
+# MODE can be set to MANUAL, in which the user presses the arrow keys
+# to manually scroll the image left or right, or it can be set to LEFT or RIGHT,
+# to automatically scroll left or right.
+MODE = "MANUAL"
+
+scene_dimensions = (640, 480)
+
 pygame.init()
-screen = pygame.display.set_mode((640, 480), pygame.DOUBLEBUF)
+screen = pygame.display.set_mode(scene_dimensions, pygame.DOUBLEBUF)
 pygame.display.set_caption('Parallax-demo')
 pygame.mouse.set_visible(0)
 
-bg = parallax.ParallaxSurface((640, 480), pygame.RLEACCEL)
+bg = parallax.ParallaxSurface(scene_dimensions, pygame.RLEACCEL)
 
-directory = dirname(__file__)
-bg.add(join(directory, 'p2.png'), 5)
-bg.add(join(directory, 'p3.png'), 2)
-bg.add(join(directory, 'p1.png'), 1)
+image_directory = "demo/images"
+
+# clouds should not move at all
+bg.add(join(image_directory, 'clouds.png'), inf)
+
+# shrubs should pan 3x as fast as the mountains
+bg.add(join(image_directory, 'mountains.png'), 3)
+bg.add(join(image_directory, 'ground_and_shrubs.png'), 1)
 
 run = True
-speed = 0
+scroll_speed = 0
 t_ref = 0
+
+
 while run:
     for event in pygame.event.get():
         if event.type == QUIT:
             run = False
-        if event.type == KEYDOWN and event.key == K_RIGHT:
-            speed += 2
-        if event.type == KEYUP and event.key == K_RIGHT:
-            speed -= 2
-        if event.type == KEYDOWN and event.key == K_LEFT:
-            speed -= 4
-        if event.type == KEYUP and event.key == K_LEFT:
-            speed += 4
+        
+        # Scroll speed can be adjusted below.
+        # On manual mode, this block causes the scroll to move twice as quickly
+        # going left vs. going right
+        if MODE == "MANUAL":
+            if event.type == KEYDOWN and event.key == K_RIGHT:
+                scroll_speed += 2
+            if event.type == KEYUP and event.key == K_RIGHT:
+                scroll_speed -= 2
+            if event.type == KEYDOWN and event.key == K_LEFT:
+                scroll_speed -= 4
+            if event.type == KEYUP and event.key == K_LEFT:
+                scroll_speed += 4
+        elif MODE == "LEFT":
+            scroll_speed = -4
+        elif MODE == "RIGHT":
+            scroll_speed = 4
+        else:
+            raise Exception("MODE must be set to either MANUAL, LEFT, or RIGHT")
 
-    bg.scroll(speed)  # Move the background with the set speed
+    bg.scroll(scroll_speed)  # Move the background with the set scroll_speed
     t = pygame.time.get_ticks()
     if (t - t_ref) > 60:
         bg.draw(screen)
