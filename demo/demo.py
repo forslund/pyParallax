@@ -17,13 +17,11 @@
 
 
 from os.path import dirname, join
-import sys
 from math import inf
 
 import pygame
 from pygame.locals import *
 
-sys.path.append("../")
 import parallax
 
 # MODE can be set to MANUAL, in which the user presses the arrow keys
@@ -40,7 +38,7 @@ pygame.mouse.set_visible(0)
 
 bg = parallax.ParallaxSurface(scene_dimensions, pygame.RLEACCEL)
 
-image_directory = "images"
+image_directory = "demo/images"
 
 # clouds should not move at all
 bg.add(join(image_directory, 'clouds.png'), inf)
